@@ -15,7 +15,7 @@ ConnectDB()
 
 
 app.use(cors({
-    origin:"",
+    origin:"http//localhost:5173",
     method:["GET","POST"]
 }))
 
@@ -23,7 +23,7 @@ app.use(cors({
 
 app.use(express.urlencoded({ extended: true }));
 
-app.set("view engine","ejs")
+// app.set("view engine","ejs")
 
 app.use("/auth",route)
 
