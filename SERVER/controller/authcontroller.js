@@ -1,6 +1,6 @@
-
-import User from "../model/authmodel"
+import User from "../model/authmodel.js"
 import bcrypt,{compare} from "bcrypt"
+import jwt from "jsonwebtoken"
 
 export const  SignUp = async(req,res)=>{
     console.log(req.body)

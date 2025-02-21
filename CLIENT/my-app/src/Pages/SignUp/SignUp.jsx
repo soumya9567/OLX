@@ -1,7 +1,44 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { registerUser } from "../../redux/reducers/authSlice";
+import { Link } from 'react-router-dom';
 
 function SignUp() {
+  const dispatch = useDispatch();
+  
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const [message, setMessage] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await axios.post("http://localhost:5000/api/signup", formData, {
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (response.data.success) {
+        dispatch(registerUser(formData)); // Dispatch user info to Redux
+        setMessage("User registered successfully");
+      } else {
+        setMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   return (
     <div>
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -10,7 +47,7 @@ function SignUp() {
 
        
 
-        <form >
+        <form  onSubmit={handleSubmit} className="space-y-4">
 
 
         <div className="mb-4">
@@ -18,8 +55,10 @@ function SignUp() {
              User Name
             </label>
             <input
-              type="name"
+              type="text"
               id="name"
+              name="username"
+              onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your user name"
             />
@@ -31,6 +70,8 @@ function SignUp() {
             <input
               type="email"
               id="email"
+              name="email"
+              onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
             />
@@ -43,6 +84,8 @@ function SignUp() {
             <input
               type="password"
               id="password"
+              name="password"
+              onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
               
