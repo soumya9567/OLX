@@ -6,38 +6,36 @@ import { Link } from 'react-router-dom';
 
 function SignUp() {
   const dispatch = useDispatch();
-  
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: ''
-  });
-
-  const [message, setMessage] = useState('');
-
+  const [formData, setFormData] = useState([]);
   const handleChange = (e) => {
+    console.log(formData, "on handle change");
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    try {
-      const response = await axios.post("http://localhost:5000/api/signup", formData, {
-        headers: { "Content-Type": "application/json" }
-      });
 
-      if (response.data.success) {
-        dispatch(registerUser(formData)); // Dispatch user info to Redux
-        setMessage("User registered successfully");
-      } else {
-        setMessage(response.data.message);
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+          dispatch(registerUser(formData));
+      try {
+        const response = await axios.post("http://localhost:3000/api/signup", formData, {
+          headers: { "Content-Type": "application/json" }
+        });
+        
+        if (response.data.success) {
+
+          dispatch(registerUser(formData));
+          console.log("User registered successfully!");
+        } else {
+          console.log("Error:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Error during registration:", error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+    };
+  
+  
+  
 
   return (
     <div>

@@ -3,10 +3,11 @@ import SignIn from './Pages/SignIn/SignIn'
 import { Routes, Route } from "react-router-dom";
 import SignUp from './Pages/SignUp/SignUp';
 import { useSelector } from 'react-redux';
+import Home from './Pages/Home/Home';
 
 
 function App() {
-  const { user, isAutheticated } = useSelector((state) => state.auth);
+  const { user} = useSelector((state) => state.auth);
   const { currentUser } = useSelector((state) => state.auth);
 
   console.log(user, "user from store");
@@ -14,15 +15,19 @@ function App() {
   useEffect(() => {
     localStorage.getItem("user");
   });
-  return (
-    <div>
 
+  return (
+    <div className="max-w-7xl mx-auto h-screen">
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        {isAutheticated ? (
+          <Route path="/" element={<Home currentUser={currentUser} />} />
+        ) : (
+          <Route path="/" element={<SignIn />} />
+        )}
+
         <Route path="/signup" element={<SignUp />} />
 
       </Routes>
-
     </div>
   )
 }
